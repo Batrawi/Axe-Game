@@ -1,67 +1,93 @@
 #include "raylib.h"
 
-int main() {
+int main()
+{
+    // window dimensions
+    int width{800};
+    int height{450};
+    InitWindow(width, height, "Stephen's Window");
 
-  // Window dimensions
-  int window_width {800};
-  int window_height {450};
+    // circle coordinates
+    int circle_x{200};
+    int circle_y{200};
+    int circle_radius{25};
+    // circle edges
+    int l_circle_x{circle_x - circle_radius};
+    int r_circle_x{circle_x + circle_radius};
+    int u_circle_y{circle_y - circle_radius};
+    int b_circle_y{circle_y + circle_radius};
 
-  //circle coordinations
-  int circleCenterX {125};
-  int circleCenterY {125};
-  int circleRadius {25};
-  int circleMove {15};
-    //circle edges
-  int circleLeftEdge {circleCenterX - circleRadius};
-  int circleRightEdge {circleCenterX + circleRadius};
-  int circleUpEdge {circleCenterY - circleRadius};
-  int circleDownEdge {circleCenterY + circleRadius};
-
-  // AXE coordinations 
-  int axePosX {300};
-  int axePosY {0};
-  int axeLength {50};
-  int axeMove {10};
+    // axe coordinates
+    int axe_x{400};
+    int axe_y{0};
+    int axe_length{50};
     // axe edges
-  int axeLeftEdge {axePosX};
-  int axeUpEdge {axePosY};
-  int axeRightEdge {axePosX + axeLength};
-  int axeDownEdge {axePosY + axeLength};
+    int l_axe_x{axe_x};
+    int r_axe_x{axe_x + axe_length};
+    int u_axe_y{axe_y};
+    int b_axe_y{axe_y + axe_length};
 
-  InitWindow(window_width,window_height,"Axe game");
+    int direction{10};
 
-  //set fps
-  int fps {60};
-  SetTargetFPS(fps);
+    bool collision_with_axe = 
+                        (b_axe_y >= u_circle_y) && 
+                        (u_axe_y <= b_circle_y) && 
+                        (r_axe_x >= l_circle_x) && 
+                        (l_axe_x <= r_circle_x);
 
-  while (!WindowShouldClose()){
-    BeginDrawing();
-    ClearBackground(WHITE);
+    SetTargetFPS(60);
+    while (WindowShouldClose() == false)
+    {
+        BeginDrawing();
+        ClearBackground(WHITE);
 
-    // game drawing
-    DrawCircle(circleCenterX, circleCenterY, circleRadius, BLUE);
-    DrawRectangle(axePosX, axePosY, axeLength, axeLength, RED);
+        if (collision_with_axe)
+        {
+            DrawText("Game Over!", 400, 200, 20, RED);
+        }
+        else
+        {
+            // Game logic begins
 
-    // axe logic
-    axePosY+= axeMove;
-    if(axeUpEdge == 0 || axeDownEdge == window_height){
-    axeMove = -axeMove;
-  }
+            // update the edges
+            l_circle_x = circle_x - circle_radius;
+            r_circle_x = circle_x + circle_radius;
+            u_circle_y = circle_y - circle_radius;
+            b_circle_y = circle_y + circle_radius;
+            l_axe_x = axe_x;
+            r_axe_x = axe_x + axe_length;
+            u_axe_y = axe_y;
+            b_axe_y = axe_y + axe_length;
+            // update collision_with_axe
+            collision_with_axe = 
+                        (b_axe_y >= u_circle_y) && 
+                        (u_axe_y <= b_circle_y) && 
+                        (r_axe_x >= l_circle_x) && 
+                        (l_axe_x <= r_circle_x);
 
+            DrawCircle(circle_x, circle_y, circle_radius, BLUE);
+            DrawRectangle(axe_x, axe_y, axe_length, axe_length, RED);
 
-    //Circle logic
-    if(IsKeyDown(KEY_D) && circleRightEdge < window_width){
-      circleCenterX+=circleMove;
+            // move the axe
+            axe_y += direction;
+            if (axe_y > height || axe_y < 0)
+            {
+                direction = -direction;
+            }
+
+            if (IsKeyDown(KEY_D) && circle_x < width)
+            {
+                circle_x += 10;
+            }
+            if (IsKeyDown(KEY_A) && circle_x > 0)
+            {
+                circle_x -= 10;
+            }
+
+            // Game logic ends
+        }
+
+        
+        EndDrawing();
     }
-    else if (IsKeyDown(KEY_A) && circleLeftEdge > 0){
-      circleCenterX-=circleMove;
-    }
-    else if (IsKeyDown(KEY_W) && circleUpEdge > 0){
-      circleCenterY-=circleMove;
-    }
-    else if (IsKeyDown(KEY_S) && circleDownEdge < window_height){
-      circleCenterY+=circleMove;
-    }
-    EndDrawing();
-  }
 }
