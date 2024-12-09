@@ -3,30 +3,7 @@
 
 A simple game built using **C++** and **Raylib** where you control a circle to avoid a falling axe. If the circle touches the axe, it's game over!
 
-## 🚀 How to Run the Game
 
-1. **Clone the repository**:
-   ```bash
-   git clone <repository-url>
-   cd <repository-folder>
-   ```
-
-2. **Install Raylib**:
-   - Visit the [Raylib installation page](https://www.raylib.com/).
-   - Download and install Raylib for your platform (Windows/Linux/Mac).
-   - Make sure to set up your compiler to link with Raylib.
-
-3. **Compile the code**:
-   - Using g++, run:
-     ```bash
-     g++ -o axe_game axe_game.cpp -lraylib -lm -ldl -lpthread -lGL
-     ```
-   - Ensure the `axe_game.cpp` file is in the same directory as the command.
-
-4. **Run the game**:
-   ```bash
-   ./axe_game
-   ```
 
 ## 🛠️ Technologies Used
 
